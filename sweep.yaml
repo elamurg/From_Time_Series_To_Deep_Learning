@@ -1,0 +1,48 @@
+program: train_lstm.py
+method: bayes
+metric:
+  name: val_mape
+  goal: minimize
+
+parameters:
+  # 6 model families (2 × 3)
+  case_study:
+    values: ["zara_dress", "chanel_bag"]
+  approach:
+    values: ["trendcount_only", "trendcount_plus_gtrends", "trendcount_gtrends_weather"]
+
+  # model/hparam search
+  lookback:
+    values: [6, 9, 12]
+  lstm_units:
+    values: [32, 64, 96, 128]
+  stacked:
+    values: [false, true]
+  dropout:
+    values: [0.0, 0.1, 0.2, 0.3]
+  optimizer:
+    values: ["adam", "nadam", "rmsprop"]
+  learning_rate:
+    distribution: log_uniform_values
+    min: 1e-4
+    max: 3e-2
+  loss:
+    values: ["mse", "huber"]
+  batch_size:
+    values: [8, 16, 32]
+  epochs:
+    values: [50, 80]
+  val_ratio:
+    values: [0.2]
+
+  # activation sweep
+  lstm_activation:
+    values: ["tanh", "relu", "sigmoid"]
+  dense_activation:
+    values: ["relu", "linear"]
+
+early_terminate:
+  type: hyperband
+  s: 2
+  eta: 2
+
