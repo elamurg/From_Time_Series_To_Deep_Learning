@@ -2,10 +2,13 @@ import os
 import random
 import numpy as np
 import pandas as pd
+import wandb
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.models import Sequential  # model type
 from tensorflow.keras.layers import LSTM, Dense  # layers
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from wandb.integration.keras import WandbCallback # keras integration
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 
