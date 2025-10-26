@@ -6,7 +6,7 @@ from tensorflow.keras import layers, callbacks, models
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import wandb
-from wandb.keras import WandbCallback
+from wandb.integration.keras import WandbCallback
 
 # -------------------- Reproducibility --------------------
 SEED = 42
