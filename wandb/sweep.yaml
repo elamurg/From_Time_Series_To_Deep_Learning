@@ -20,6 +20,10 @@ parameters:
     values: [false, true]
   dropout:
     values: [0.0, 0.1, 0.2, 0.3]
+  lstm_activation:
+    values: ["tanh", "relu", "sigmoid"]
+  dense_activation:
+    values: ["relu", "linear"]
   optimizer:
     values: ["adam", "nadam", "rmsprop"]
   learning_rate:

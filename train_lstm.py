@@ -126,14 +126,20 @@ def chronological_split(X, y, val_ratio=0.2):
 # -------------------- Model --------------------
 def build_model(cfg, n_features):
     model = models.Sequential()
-    model.add(layers.LSTM(cfg.lstm_units, activation="tanh",
-                          return_sequences=cfg.stacked,
-                          input_shape=(cfg.lookback, n_features)))
+    model.add(layers.LSTM(
+        cfg.lstm_units,
+        activation=getattr(cfg, "lstm_activation", "tanh"),
+        return_sequences=cfg.stacked,
+        input_shape=(cfg.lookback, n_features)
+    ))
     model.add(layers.Dropout(cfg.dropout))
     if cfg.stacked:
-        model.add(layers.LSTM(max(32, cfg.lstm_units // 2)))
+        model.add(layers.LSTM(
+            max(32, cfg.lstm_units // 2),
+            activation=getattr(cfg, "lstm_activation", "tanh")
+        ))
         model.add(layers.Dropout(cfg.dropout))
-    model.add(layers.Dense(1, activation="relu"))
+    model.add(layers.Dense(1, activation=getattr(cfg, "dense_activation", "relu")))
 
     # optimizer
     if cfg.optimizer == "adam":
@@ -205,6 +211,11 @@ def main():
         callbacks.ModelCheckpoint("model-best.keras", monitor="val_mae", save_best_only=True),
         WandbCallback(save_model=False)
     ]
+    wandb.log({
+         "lstm_activation": cfg.lstm_activation,
+         "dense_activation": cfg.dense_activation
+         })
+
 
     history = model.fit(
         Xtr_seq, ytr_seq,
